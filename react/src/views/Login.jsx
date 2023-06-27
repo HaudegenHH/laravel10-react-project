@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom"
 import { useStateContext } from "../contexts/ContextProvider";
 import axiosClient from "../axios-client";
@@ -7,6 +7,7 @@ export default function Login() {
   const emailRef = useRef();
   const passwordRef = useRef();
 
+  const [errors, setErrors] = useState(null);
   const {setUser, setToken} = useStateContext();
 
   const onSubmit = (e) => {
@@ -18,6 +19,8 @@ export default function Login() {
     }
     // console.log(payload);
     
+    setErrors(null);
+
     axiosClient.post('/login', payload)
     .then(({data}) => {
       setToken(data.token)
@@ -27,7 +30,14 @@ export default function Login() {
       const response = err.response;
       // 422 - validation error
       if(response && response.status === 422) {
-        console.log(response.data.errors);
+        // console.log(response.data.errors);
+        if(response.data.errors){
+          setErrors(response.data.errors)
+        } else {
+          setErrors({
+            email: [response.data.message]
+          })
+        }
       }
     })
 
@@ -38,6 +48,13 @@ export default function Login() {
       <div className="form">
         <form onSubmit={onSubmit}>
           <h1 className="title">Login into your account</h1>
+          {errors && 
+            <div className="alert">
+              {Object.keys(errors).map(key => (
+                <p key={key}>{errors[key][0]}</p>
+              ))}
+            </div>
+          }
           <input ref={emailRef} type="email" placeholder="Email.." />
           <input ref={passwordRef} type="password" placeholder="Password.." />
           <button className="btn btn-block">Login</button>
