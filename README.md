@@ -121,4 +121,6 @@ php artisan db:seed
 **Note:**
  i higly recommend the extension "SQLite Viewer" for vscode or a similar ext to see the users table been seeded with the fake data 
 
-- with the eloquent paginate method you will get back not only the specified perPage results (10 in this case) but also, under "links" the first, the last and the next endpoint  ( ".../api/users?page=1" )
+- with the eloquent paginate method you will get back not only the specified perPage results (10 in this case) but also, under "links" the first, the last and the next endpoint  ( ".../api/users?page=1" ), and under "meta" even more information (currentPage, total, from, to,..)
+
+
