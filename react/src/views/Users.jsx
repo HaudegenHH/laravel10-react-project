@@ -1,8 +1,29 @@
+import { useState, useEffect } from 'react';
+import axiosClient from '../axios-client';
 
 export default function Users() {
-    return (
-      <div>
-        Users
-      </div>
-    )
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
+  
+  useEffect(() => {
+    getUsers();
+  }, [])
+  
+  const getUsers = () => {
+    setLoading(true);
+    axiosClient.get('/users')
+    .then(({data}) => {
+      console.log(data);
+      setLoading(false);
+    })
+    .catch(() => {
+      setLoading(false);
+    })
   }
+
+  return (
+    <div>
+      Users
+    </div>
+  )
+}

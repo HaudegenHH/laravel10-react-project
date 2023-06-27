@@ -84,3 +84,41 @@ intend_size = 2
 - so in the DefaultLayout you simply ask if the token exist (using the useStateContext to access it) and if its null, redirect the user to the login page using the Navigate component
 - so basically every route that is children of DefaultLayout leads to "/login" if there is no token
 - similar in the GuestLayout: if the token is available and the user is on one of the routes under GuestLayout (login and signup) , then the user will be automatically redirected to "/" and from there redirected to Users page
+
+---
+
+- after the Login/Signup/Logout functionality is done, u can create the actual user page. For that, you need obviously the User model, an (api!) resource controller, and 2 Requests (for store and update):
+
+```sh
+php artisan make:controller Api/UserController --model=User --resource --requests --api
+```
+
+-as well as a UserResource:
+
+```sh
+php artisan make:resource UserResource
+```
+
+## UserResource
+
+- A Resource is basically a class that is used to convert the database models into JSON serializable data 
+
+**Note** because i am running in StrictMode useEffect will be called twice (in development! but not in production)
+
+## Seeder
+- lets create some users with the DatabaseSeeder 
+- so in DatabaseSeeder.php uncomment:
+
+```sh
+\App\Models\User::factory(50)->create();
+```
+
+- and then run in the console:
+```sh
+php artisan db:seed
+```
+
+**Note:**
+ i higly recommend the extension "SQLite Viewer" for vscode or a similar ext to see the users table been seeded with the fake data 
+
+- with the eloquent paginate method you will get back not only the specified perPage results (10 in this case) but also, under "links" the first, the last and the next endpoint  ( ".../api/users?page=1" )
