@@ -1,16 +1,18 @@
 import { useState, useEffect } from 'react';
 import axiosClient from '../axios-client';
 import { Link } from 'react-router-dom';
+import { useStateContext } from '../contexts/ContextProvider';
 
 export default function Users() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
+  const {setNotification} = useStateContext()
   
   useEffect(() => {
     getUsers();
   }, []);
 
-  const onDeleteClick = user => {
+  const handleDelete = user => {
     if (!window.confirm("Are you sure you want to delete this user?")) {
       return
     }
@@ -73,7 +75,7 @@ export default function Users() {
                 <td>
                   <Link className="btn-edit" to={'/users/' + user.id}>Edit</Link>
                   &nbsp;
-                  <button className="btn-delete" onClick={ev => onDeleteClick(user)}>Delete</button>
+                  <button className="btn-delete" onClick={ev => handleDelete(user)}>Delete</button>
                 </td>
               </tr>
             ))}
